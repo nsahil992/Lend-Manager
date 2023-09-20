@@ -27,4 +27,10 @@ else
         println("You haven't given anything to $(friend_name)")
         continue
     end
+    println("This is what you gave to $(friend_name)")
+    for item in lent[friend_index]
+    println(item)
+    end
+
+
 
