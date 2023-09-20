@@ -22,5 +22,9 @@ if length(friend_index) == 0
     println("Sorry, I didn't find that friend")
     continue
 else
-end
+    friend_index = friend_index[1]
+    if(length(lent[friend_index])) == 0
+        println("You haven't given anything to $(friend_name)")
+        continue
+    end
 
