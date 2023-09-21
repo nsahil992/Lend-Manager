@@ -1,6 +1,8 @@
 friends = ["Courage", "Doreamon", "Ben"]         #friends array
 lent = [[], ["Computer, Gadget"], ["Watch"]]     #lent array
 while true
+
+    #while loop inserted if the conditions are true
     println("What do you want to do?(i.e takeback/give/newfriend/quit)")
     user_action = readline() #takes user action
     if user_action == "quit"
@@ -106,4 +108,4 @@ end
 end
 
 
-
+#end
