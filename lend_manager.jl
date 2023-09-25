@@ -38,7 +38,7 @@ while true
     # hence, in line 34, if we the item that we have lent doesn't exist then we haven't lent anything
 
             println("This is what you gave to $(friend_name)")
-            for item in lent[friend_index]
+            for item in lent[friend_name]
                 println(item)
             end
 
@@ -46,7 +46,7 @@ while true
 
             println("What did you takeback from $(friend_name)")
             item_name = readline()
-             item_index = findall(x -> x == item_name, lent[friend_index])
+             item_index = findall(x -> x == item_name, lent[friend_name])
               if length(item_index) == 0
                 println("Sorry, I did'nt find that item.")
                 continue
@@ -55,7 +55,7 @@ while true
     #if the if the name of the item from multiple item doesn't exist then it won't give you the items name
             else
                 item_index = item_index[1]
-                 deleteat!(lent[friend_index], item_index)
+                 deleteat!(lent[friend_name], item_index)
                     println("Alright, I'll remember that you took $(item_name) from $(friend_name)")
             end
         end
@@ -64,7 +64,7 @@ while true
 
         elseif  user_action == "give"
          println("These are your friends:")
-           for friend in friends
+           for friend in keys(lent)
             println(friend)
         end
 
@@ -73,7 +73,7 @@ while true
         println("Which friend do you want to lend to? ")
          friend_name = readline()
          friend_index = findall(x -> x == friend_name, friends)
-         if length(friend_index) == 0
+         if !(friend_name in keys(lent))
             println("Sorry, I didn't find that friend.")
         continue
 
@@ -83,7 +83,7 @@ while true
         friend_index = friend_index[1]
         println("What do you want to lend to $(friend_name)?")
         item_name = readline()
-        push!(lent[friend_index], item_name)
+        push!(lent[friend_name], item_name)
         println("Got it! You lent $(item_name) to $(friend_name).")
     end
 
