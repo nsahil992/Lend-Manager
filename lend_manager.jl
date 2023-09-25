@@ -103,4 +103,6 @@ end
 end
 println("bye. . .")
 
+#The application is reprogrammed using Dictionaries. As Dictionaries are very flexible as compared to arrays and they do
+#not require corresponding data which is required for arrays.
 
