@@ -92,8 +92,7 @@ while true
 elseif user_action == "newfriend"
     println("Who is your new friend?")
     friend_name = readline()
-    push!(friends, friend_name)
-    push!(lent, [])
+    lent[friend_name] = []
 
     #if user inputs new friend then it will add the new friends name in the array
 else
@@ -102,6 +101,6 @@ else
     #if the user inputs something that is not valid then it will ask user for valid options
 end
 end
-
+println("bye. . .")
 
 
