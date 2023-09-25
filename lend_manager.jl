@@ -20,7 +20,7 @@ while true
         println("Which friend did you lent to? ")
         friend_name = readline()
         friend_index = findall(x -> x == friend_name, friends)
-        if length(friend_index) == 0
+        if !(friend_name in keys(lent))
             println("Sorry, I didn't find that friend")
             continue
 
@@ -29,8 +29,7 @@ while true
     #if the index of the friend is 0 then the friend doesn't exist in the friends array
 
         else
-            friend_index = friend_index[1]
-            if(length(lent[friend_index])) == 0
+            if(length(lent[friend_name])) == 0
                 println("You haven't given anything to $(friend_name)")
                 continue
             end
