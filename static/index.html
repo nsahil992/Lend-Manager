@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lend Manager</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Lend Manager</h1>
+        
+        <div class="action-buttons">
+            <button id="giveBtn">Give</button>
+            <button id="takebackBtn">Take Back</button>
+            <button id="newFriendBtn">New Friend</button>
+        </div>
+        
+        <div id="giveSection" class="section">
+            <h2>Give an Item</h2>
+            <div id="friendListGive" class="friend-list">
+                <p>Loading friends...</p>
+            </div>
+            <div class="input-group">
+                <label for="selectedFriendGive">Selected Friend:</label>
+                <input type="text" id="selectedFriendGive" readonly>
+            </div>
+            <div class="input-group">
+                <label for="itemNameGive">Item Name:</label>
+                <input type="text" id="itemNameGive">
+            </div>
+            <button id="submitGive">Submit</button>
+            <p id="giveResult" class="result"></p>
+        </div>
+        
+        <div id="takebackSection" class="section">
+            <h2>Take Back an Item</h2>
+            <div id="friendListTakeback" class="friend-list">
+                <p>Loading friends...</p>
+            </div>
+            <div class="input-group">
+                <label for="selectedFriendTakeback">Selected Friend:</label>
+                <input type="text" id="selectedFriendTakeback" readonly>
+            </div>
+            <div id="itemListTakeback" class="item-list">
+                <p>Select a friend to see items</p>
+            </div>
+            <div class="input-group">
+                <label for="selectedItemTakeback">Selected Item:</label>
+                <input type="text" id="selectedItemTakeback" readonly>
+            </div>
+            <button id="submitTakeback">Submit</button>
+            <p id="takebackResult" class="result"></p>
+        </div>
+        
+        <div id="newFriendSection" class="section">
+            <h2>Add New Friend</h2>
+            <div class="input-group">
+                <label for="newFriendName">Friend Name:</label>
+                <input type="text" id="newFriendName">
+            </div>
+            <button id="submitNewFriend">Submit</button>
+            <p id="newFriendResult" class="result"></p>
+        </div>
+    </div>
+    
+    <script src="script.js"></script>
+</body>
+</html>
