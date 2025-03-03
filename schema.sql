@@ -1,3 +1,9 @@
+-- Create the database
+CREATE DATABASE lendmanager;
+
+-- Connect to the database
+\c lendmanager
+
 -- Create friends table
 CREATE TABLE IF NOT EXISTS friends (
     id SERIAL PRIMARY KEY,
