@@ -32,7 +32,53 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // API endpoints (adjust these to match your Go backend)
     const API_URL = 'http://localhost:8080/api'; // Adjust this to your backend URL
-    
+
+    // Create a toast notification container
+    const toastContainer = document.createElement('div');
+    toastContainer.id = 'toast-container';
+    document.body.appendChild(toastContainer);
+
+    // Function to show a toast notification
+    function showToast(message, type = 'info') {
+        const toast = document.createElement('div');
+        toast.className = `toast-notification ${type}`;
+        
+        // Create icon element
+        const iconElement = document.createElement('div');
+        iconElement.className = 'toast-icon';
+        
+        // Set icon content based on type
+        let iconContent = '✓';
+        if (type === 'error') iconContent = '!';
+        if (type === 'info') iconContent = 'i';
+        
+        iconElement.textContent = iconContent;
+        
+        // Create message element
+        const messageElement = document.createElement('div');
+        messageElement.textContent = message;
+        
+        // Add elements to toast
+        toast.appendChild(iconElement);
+        toast.appendChild(messageElement);
+        
+        // Add to container
+        toastContainer.appendChild(toast);
+        
+        // Show the toast
+        setTimeout(() => {
+            toast.classList.add('show');
+        }, 10);
+        
+        // Hide and remove the toast after 5 seconds
+        setTimeout(() => {
+            toast.classList.remove('show');
+            setTimeout(() => {
+                toastContainer.removeChild(toast);
+            }, 500);
+        }, 5000);
+    }
+
     // Show the selected section and hide others
     function showSection(section) {
         giveSection.style.display = 'none';
@@ -76,6 +122,7 @@ document.addEventListener('DOMContentLoaded', function() {
             return friends;
         } catch (error) {
             console.error('Error fetching friends:', error);
+            showToast('Failed to load your friends. Please try again.', 'error');
             return [];
         }
     }
@@ -112,6 +159,7 @@ document.addEventListener('DOMContentLoaded', function() {
             return items;
         } catch (error) {
             console.error('Error fetching items:', error);
+            showToast('Failed to load items from this friend.', 'error');
             return [];
         }
     }
@@ -168,8 +216,11 @@ document.addEventListener('DOMContentLoaded', function() {
             e.target.classList.add('selected');
             
             // Update selected friend
-            selectedFriendId = e.target.dataset.id;
+            selectedFriendId = parseInt(e.target.dataset.id, 10);
             selectedFriendGive.value = e.target.dataset.name;
+            
+            // Show acknowledgment
+            showToast(`Selected ${e.target.dataset.name} to receive an item`, 'info');
         }
     });
     
@@ -184,8 +235,11 @@ document.addEventListener('DOMContentLoaded', function() {
             e.target.classList.add('selected');
             
             // Update selected friend
-            selectedFriendId = e.target.dataset.id;
+            selectedFriendId = parseInt(e.target.dataset.id, 10);
             selectedFriendTakeback.value = e.target.dataset.name;
+            
+            // Show acknowledgment
+            showToast(`Looking at items borrowed by ${e.target.dataset.name}`, 'info');
             
             // Fetch and display items for the selected friend
             const items = await fetchItems(selectedFriendId);
@@ -206,6 +260,9 @@ document.addEventListener('DOMContentLoaded', function() {
             // Update selected item
             selectedItemId = e.target.dataset.id;
             selectedItemTakeback.value = e.target.dataset.name;
+            
+            // Show acknowledgment
+            showToast(`Selected "${e.target.dataset.name}" to take back`, 'info');
         }
     });
     
@@ -240,19 +297,35 @@ document.addEventListener('DOMContentLoaded', function() {
             });
             
             if (!response.ok) {
-                throw new Error('Failed to add item');
+                 // Try to parse JSON error response
+                try {
+                    const errorData = await response.json();
+                    throw new Error(`Failed to add item: ${errorData.error || 'Unknown error'}`);
+                } catch (parseError) {
+                    // If JSON parsing fails, use the default error message
+                    throw new Error('Failed to add item');
+                }
             }
             
-            giveResult.textContent = `Successfully lent ${itemNameGive.value.trim()} to ${selectedFriendGive.value}.`;
+            const successMessage = `Successfully lent ${itemNameGive.value.trim()} to ${selectedFriendGive.value}.`;
+            giveResult.textContent = successMessage;
             giveResult.style.display = 'block';
+            giveResult.className = 'result acknowledgment';
+            
+            // Show toast notification with acknowledgment
+            showToast(successMessage, 'success');
             
             // Reset form
             itemNameGive.value = '';
+            resetSelections();
             
         } catch (error) {
             console.error('Error adding item:', error);
-            giveResult.textContent = 'An error occurred. Please try again.';
+            giveResult.textContent = error.message || 'An error occurred. Please try again.';
             giveResult.style.display = 'block';
+            
+            // Show toast notification with error
+            showToast(error.message || 'Failed to lend the item. Please try again.', 'error');
         }
     });
     
@@ -283,8 +356,13 @@ document.addEventListener('DOMContentLoaded', function() {
                 throw new Error('Failed to delete item');
             }
             
-            takebackResult.textContent = `Successfully took back ${selectedItemTakeback.value} from ${selectedFriendTakeback.value}.`;
+            const successMessage = `Successfully took back ${selectedItemTakeback.value} from ${selectedFriendTakeback.value}.`;
+            takebackResult.textContent = successMessage;
             takebackResult.style.display = 'block';
+            takebackResult.className = 'result acknowledgment';
+            
+            // Show toast notification with acknowledgment
+            showToast(successMessage, 'success');
             
             // Refresh items list
             const items = await fetchItems(selectedFriendId);
@@ -293,11 +371,15 @@ document.addEventListener('DOMContentLoaded', function() {
             // Reset selection
             selectedItemId = null;
             selectedItemTakeback.value = '';
+            resetSelections();
             
         } catch (error) {
             console.error('Error deleting item:', error);
             takebackResult.textContent = 'An error occurred. Please try again.';
             takebackResult.style.display = 'block';
+            
+            // Show toast notification with error
+            showToast('Failed to take back the item. Please try again.', 'error');
         }
     });
     
@@ -328,16 +410,27 @@ document.addEventListener('DOMContentLoaded', function() {
                 throw new Error('Failed to add friend');
             }
             
-            newFriendResult.textContent = `Successfully added ${newFriendName.value.trim()} as a friend.`;
+            const successMessage = `Successfully added ${newFriendName.value.trim()} as a friend.`;
+            newFriendResult.textContent = successMessage;
             newFriendResult.style.display = 'block';
+            newFriendResult.className = 'result acknowledgment';
+            
+            // Show toast notification with acknowledgment
+            showToast(successMessage, 'success');
             
             // Reset form
             newFriendName.value = '';
+            initApp();
+            resetSelections();
+            showSection(newFriendSection);
             
         } catch (error) {
             console.error('Error adding friend:', error);
             newFriendResult.textContent = 'An error occurred. Please try again.';
             newFriendResult.style.display = 'block';
+            
+            // Show toast notification with error
+            showToast('Failed to add friend. Please try again.', 'error');
         }
     });
     

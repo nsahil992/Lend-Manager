@@ -9,15 +9,16 @@
 <body>
     <div class="container">
         <h1>Lend Manager</h1>
-        
+
         <div class="action-buttons">
             <button id="giveBtn">Give</button>
             <button id="takebackBtn">Take Back</button>
             <button id="newFriendBtn">New Friend</button>
         </div>
-        
+
         <div id="giveSection" class="section">
             <h2>Give an Item</h2>
+            <p style="padding: 5px; font-weight: bold;">Your friends</p>
             <div id="friendListGive" class="friend-list">
                 <p>Loading friends...</p>
             </div>
@@ -32,9 +33,10 @@
             <button id="submitGive">Submit</button>
             <p id="giveResult" class="result"></p>
         </div>
-        
+
         <div id="takebackSection" class="section">
             <h2>Take Back an Item</h2>
+             <p style="padding: 5px; font-weight: bold;">Your friends</p>
             <div id="friendListTakeback" class="friend-list">
                 <p>Loading friends...</p>
             </div>
@@ -52,7 +54,7 @@
             <button id="submitTakeback">Submit</button>
             <p id="takebackResult" class="result"></p>
         </div>
-        
+
         <div id="newFriendSection" class="section">
             <h2>Add New Friend</h2>
             <div class="input-group">
@@ -63,7 +65,7 @@
             <p id="newFriendResult" class="result"></p>
         </div>
     </div>
-    
+
     <script src="script.js"></script>
 </body>
 </html>
