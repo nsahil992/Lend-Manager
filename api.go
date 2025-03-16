@@ -385,5 +385,5 @@ func (a *App) deleteItem(w http.ResponseWriter, r *http.Request) {
 func main() {
 	app := App{}
 	app.Initialize()
-	app.Run(":8080")
+	app.Run(":8081")
 }
